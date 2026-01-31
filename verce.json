@@ -1,8 +1,0 @@
-{
-    "functions": {
-      "api/**/*.js": {
-        "nodejs": "18.x"
-      }
-    }
-  }
-  
