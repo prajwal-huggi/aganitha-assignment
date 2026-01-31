@@ -11,7 +11,7 @@ if (process.env.NODE_ENV !== "production") {
   app.use(express.json());
   
   app.use("/", homeRoutes);
-  app.use("/api", pasteRoutes);
+  app.use("/", pasteRoutes);
   
   app.get("/p/:slug", (req, res) => {
     res.redirect(`/api/pastes/${req.params.slug}`);
