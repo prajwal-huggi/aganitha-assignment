@@ -26,28 +26,4 @@ const createPaste = async (req, res) => {
   });
 };
 
-const getPaste = async (req, res) => {
-  const { slug } = req.params;
-
-  const paste = await Paste.findOne({ where: { slug } });
-
-  if (!paste) {
-    return res.sendStatus(404);
-  }
-
-  const expiredByTime =
-    paste.expires_at && paste.expires_at < new Date();
-
-  const expiredByViews =
-    paste.max_views !== null && paste.view_count >= paste.max_views;
-
-  if (expiredByTime || expiredByViews) {
-    return res.sendStatus(410);
-  }
-
-  await paste.increment("view_count");
-
-  return res.json({ content: paste.content });
-};
-
-module.exports = { createPaste, getPaste };
+module.exports = { createPaste };
