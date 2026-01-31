@@ -1,4 +1,4 @@
-const { Sequelize }= require("sequelize")
+const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize(
   process.env.POSTGRES_DB,
@@ -8,8 +8,24 @@ const sequelize = new Sequelize(
     host: process.env.POSTGRES_HOST,
     port: Number(process.env.POSTGRES_PORT),
     dialect: "postgres",
-    logging: false
+    logging: false,
+
+    // REQUIRED for Neon
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    },
+
+    // REQUIRED for Vercel (serverless)
+    pool: {
+      max: 1,
+      min: 0,
+      idle: 10000,
+      acquire: 30000
+    }
   }
 );
 
-module.exports= sequelize;
+module.exports = sequelize;
