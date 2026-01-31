@@ -1,5 +1,10 @@
 const Paste = require("../models/model.js");
-const { nanoid } = require("nanoid");
+
+let nanoid;
+
+(async () => {
+  ({ nanoid } = await import("nanoid"));
+})();
 
 const createPaste = async (req, res) => {
   const { content, expiresInSeconds, maxViews } = req.body;
