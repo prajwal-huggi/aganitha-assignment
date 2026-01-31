@@ -1,9 +1,9 @@
 require("dotenv").config();
 
 const express = require("express");
-const sequelize = require("../db.js");
-const pasteRoutes = require("../routes/pasteRoutes.js");
-const homeRoutes = require("../routes/homeRoutes.js");
+const sequelize = require("../db");
+const pasteRoutes = require("../routes/pasteRoutes");
+const homeRoutes = require("../routes/homeRoutes");
 
 const app = express();
 app.use(express.json());
@@ -15,24 +15,23 @@ app.get("/p/:slug", (req, res) => {
   res.redirect(`/api/pastes/${req.params.slug}`);
 });
 
-/**
- * Vercel is serverless.
- * This flag prevents reconnecting to DB on every request.
- */
-let isInitialized = false;
+let isReady = false;
 
 module.exports = async (req, res) => {
   try {
-    if (!isInitialized) {
+    if (!isReady) {
       await sequelize.authenticate();
       await sequelize.sync();
-      console.log("DB connected (serverless)");
-      isInitialized = true;
+      isReady = true;
+      console.log("DB ready");
     }
 
     return app(req, res);
   } catch (err) {
-    console.error("Serverless handler error:", err);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error("FUNCTION CRASH:", err);
+    return res.status(500).json({
+      error: "Internal Server Error",
+      details: err.message
+    });
   }
 };
