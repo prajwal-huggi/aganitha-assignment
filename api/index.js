@@ -8,7 +8,7 @@ const homeRoutes = require("../routes/homeRoutes");
 const app = express();
 app.use(express.json());
 
-app.get("/", homeRoutes);
+app.use("/", homeRoutes);
 app.use("/api", pasteRoutes);
 
 app.get("/p/:slug", (req, res) => {
