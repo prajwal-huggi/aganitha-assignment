@@ -1,4 +1,5 @@
 const { Sequelize } = require("sequelize");
+console.log("PG RESOLVES TO:", require.resolve("pg"));
 
 const sequelize = new Sequelize(
   process.env.POSTGRES_DB,
