@@ -1,10 +1,5 @@
 const Paste = require("../models/model.js");
-
-let nanoid;
-
-(async () => {
-  ({ nanoid } = await import("nanoid"));
-})();
+const { nanoid } = require("nanoid");
 
 const createPaste = async (req, res) => {
   const { content, expiresInSeconds, maxViews } = req.body;
@@ -14,6 +9,7 @@ const createPaste = async (req, res) => {
   }
 
   const slug = nanoid(8);
+
   const expiresAt = expiresInSeconds
     ? new Date(Date.now() + expiresInSeconds * 1000)
     : null;
@@ -25,7 +21,7 @@ const createPaste = async (req, res) => {
     max_views: maxViews ?? null
   });
 
-  res.status(201).json({
+  return res.status(201).json({
     url: `${req.protocol}://${req.get("host")}/p/${slug}`
   });
 };
@@ -51,7 +47,7 @@ const getPaste = async (req, res) => {
 
   await paste.increment("view_count");
 
-  res.json({ content: paste.content });
+  return res.json({ content: paste.content });
 };
 
 module.exports = { createPaste, getPaste };
